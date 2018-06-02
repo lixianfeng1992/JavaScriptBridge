@@ -1,0 +1,21 @@
+<!doctype>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Bridge</title>
+  </head>
+  <body>
+    <p style="font-size: 16px">test html</p>
+    <button onclick="shareClick(msgBody)">JS call Native</button>
+  </body>
+  <script>
+    var msgBody = {};
+    msgBody.handler = 'common';
+    msgBody.params = { title: '这是JS回调Native' }; //任意json对象，用于传参.
+
+    function shareClick(data) {
+      window.webkit.messageHandlers.WKJSBridge.postMessage(data);
+    }
+  </script>
+</html>
