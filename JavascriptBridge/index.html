@@ -6,16 +6,44 @@
     <title>Bridge</title>
   </head>
   <body>
-    <p style="font-size: 16px">test html</p>
-    <button onclick="shareClick(msgBody)">JS call Native</button>
+    <p id="title">test html</p>
+    <button id="js_call_ative" onclick="sendMessage(msgBody, cb)">JS call Native</button>
   </body>
   <script>
     var msgBody = {};
     msgBody.handler = 'common';
-    msgBody.params = { title: '这是JS回调Native' }; //任意json对象，用于传参.
+    msgBody.parameters = { title: '这是JS回调Native' }; //任意json对象，用于传参.
+    msgBody.callbackId = getNextCallbackID();
+    msgBody.callbackFunction = 'window.callbackDispatcher';
 
-    function shareClick(data) {
-      window.webkit.messageHandlers.WKJSBridge.postMessage(data);
+    var msgCallbackMap = {};
+
+    function sendMessage(data, callback) {
+      const params = { ...data };
+      if (callback && (typeof callback === 'function')) {
+        var callbackId = window.getNextCallbackID();
+        window.msgCallbackMap[callbackId] = callback;
+        params.callbackId = callbackId;
+        params.callbackFunction = 'window.callbackDispatcher'
+        
+      }
+
+      window.webkit.messageHandlers.WKJSBridge.postMessage(params);
+    }
+
+    function cb (data) {
+      var callback = document.createElement('div')
+      callback.innerText = `JS call OC回调${JSON.parse(data).result}`;
+      document.body.insertBefore(callback, document.getElementById('js_call_ative'))
+    }
+
+    function callbackDispatcher(id, data) {
+      var cb = window.msgCallbackMap[id];
+      cb(data);
+    }
+
+    function getNextCallbackID () {
+      return `${(new Date()).valueOf()}`
     }
   </script>
 </html>

@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <WebKit/WebKit.h>
+#import "BridgeMessage.h"
 
-typedef void (^HandleBlock)(NSDictionary *msg);
+typedef void (^HandleBlock)(BridgeMessage *msg);
 
 @interface WKJSBridge : NSObject
 

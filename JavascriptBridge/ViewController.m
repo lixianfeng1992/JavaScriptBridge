@@ -22,17 +22,14 @@
   [super viewDidLoad];
   
   [self initWebView];
-  
-  self.bridge = [[WKJSBridge alloc] init];
-  [self.bridge bridgeForWebView:self.webView];
-  
   [self loadExamplePage:self.webView];
-  
-  [self.bridge registerHandler:@"common" handler:^(NSDictionary *msg) {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"JS回调OC" message:msg[@"title"] preferredStyle:UIAlertControllerStyleAlert];
+  [self.bridge registerHandler:@"common" handler:^(BridgeMessage *msg) {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"JS回调OC" message:msg.parameters[@"title"] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:action];
     [self presentViewController:alert animated:YES completion:nil];
+    NSDictionary *result = @{@"result": @"result"};
+    [msg callback:result];
   }];
 }
 
@@ -46,6 +43,9 @@
   
   self.webView = webView;
   [self.view addSubview:webView];
+  
+  self.bridge = [[WKJSBridge alloc] init];
+  [self.bridge bridgeForWebView:self.webView];
 }
 
 - (void)loadExamplePage: (WKWebView*)webView {

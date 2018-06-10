@@ -15,6 +15,7 @@
 		8B3AE6E620C25C1200512B49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AE6E520C25C1200512B49 /* main.m */; };
 		8B3AE6ED20C2609F00512B49 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 8B3AE6EC20C2609F00512B49 /* index.html */; };
 		8B3AE6F020C2649200512B49 /* WKJSBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AE6EF20C2649200512B49 /* WKJSBridge.m */; };
+		8BCB8EEA20CCE7E7007DA1B1 /* BridgeMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCB8EE920CCE7E7007DA1B1 /* BridgeMessage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,8 @@
 		8B3AE6EC20C2609F00512B49 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		8B3AE6EE20C2649200512B49 /* WKJSBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WKJSBridge.h; sourceTree = "<group>"; };
 		8B3AE6EF20C2649200512B49 /* WKJSBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WKJSBridge.m; sourceTree = "<group>"; };
+		8BCB8EE820CCE7E7007DA1B1 /* BridgeMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeMessage.h; sourceTree = "<group>"; };
+		8BCB8EE920CCE7E7007DA1B1 /* BridgeMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BridgeMessage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +72,8 @@
 				8B3AE6DA20C25C1100512B49 /* ViewController.m */,
 				8B3AE6EE20C2649200512B49 /* WKJSBridge.h */,
 				8B3AE6EF20C2649200512B49 /* WKJSBridge.m */,
+				8BCB8EE820CCE7E7007DA1B1 /* BridgeMessage.h */,
+				8BCB8EE920CCE7E7007DA1B1 /* BridgeMessage.m */,
 				8B3AE6DC20C25C1100512B49 /* Main.storyboard */,
 				8B3AE6DF20C25C1200512B49 /* Assets.xcassets */,
 				8B3AE6E120C25C1200512B49 /* LaunchScreen.storyboard */,
@@ -152,6 +157,7 @@
 			files = (
 				8B3AE6DB20C25C1100512B49 /* ViewController.m in Sources */,
 				8B3AE6E620C25C1200512B49 /* main.m in Sources */,
+				8BCB8EEA20CCE7E7007DA1B1 /* BridgeMessage.m in Sources */,
 				8B3AE6D820C25C1100512B49 /* AppDelegate.m in Sources */,
 				8B3AE6F020C2649200512B49 /* WKJSBridge.m in Sources */,
 			);

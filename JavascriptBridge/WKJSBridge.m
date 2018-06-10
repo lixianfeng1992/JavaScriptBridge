@@ -65,9 +65,61 @@
 #pragma WKScriptMessageHandler
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
-  NSDictionary *msgBody = message.body;\
-  HandleBlock handler = [self.handlerMap objectForKey:msgBody[@"handler"]];
-  handler(msgBody[@"params"]);
+  NSDictionary *msgBody = message.body;
+  if (msgBody) {
+    BridgeMessage *bridgeMsg = [[BridgeMessage alloc] initWithDictionary:message.body];
+    HandleBlock handler = [self.handlerMap objectForKey:msgBody[@"handler"]];
+    
+    if (bridgeMsg.callbackID && bridgeMsg.callbackID.length > 0) {
+      __weak typeof(self)weakSelf = self;
+      JSResponseCallback callback = ^(id resposeData) {
+        [weakSelf injectMessageFunction:bridgeMsg.callbackFunction withActionId:bridgeMsg.callbackID withParams:resposeData];
+      };
+      
+      [bridgeMsg setCallbackFunction:callback];
+    }
+    
+    if (handler) {
+      handler(bridgeMsg);
+    }
+  }
+}
+
+- (void)injectMessageFunction: (NSString *)msg withActionId: (NSString *)actionId withParams: (NSDictionary *)params {
+  NSString *paramsString = [self _serializeMessageData:params];
+  NSString *paramsJSString = [self _transcodingJavascriptMessage:paramsString];
+  NSString *javascriptCommand = [NSString stringWithFormat:@"%@('%@', '%@');", msg, actionId, paramsJSString];
+  if ([[NSThread currentThread] isMainThread]) {
+    [self.webView evaluateJavaScript:javascriptCommand completionHandler:nil];
+  } else {
+    __strong typeof(self)strongSelf = self;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+      [strongSelf.webView evaluateJavaScript:javascriptCommand completionHandler:nil];
+    });
+  }
+}
+
+// 字典JSON化
+- (NSString *)_serializeMessageData:(id)message{
+  if (message) {
+    return [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:message options:NSJSONWritingPrettyPrinted error:nil] encoding:NSUTF8StringEncoding];
+  }
+  return nil;
+}
+// JSON Javascript编码处理
+- (NSString *)_transcodingJavascriptMessage:(NSString *)message
+{
+  //NSLog(@"dispatchMessage = %@",message);
+  message = [message stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+  message = [message stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+  message = [message stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"];
+  message = [message stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+  message = [message stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+  message = [message stringByReplacingOccurrencesOfString:@"\f" withString:@"\\f"];
+  message = [message stringByReplacingOccurrencesOfString:@"\u2028" withString:@"\\u2028"];
+  message = [message stringByReplacingOccurrencesOfString:@"\u2029" withString:@"\\u2029"];
+  
+  return message;
 }
 
 @end
